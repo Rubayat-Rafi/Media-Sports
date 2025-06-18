@@ -1,7 +1,28 @@
+'use client'
 import Link from "next/link";
+import { useEffect, useState } from "react";
+import { IoInformationCircleOutline } from "react-icons/io5";
 
 const Navbar = () => {
+    const [localTime, setLocalTime] = useState('');
 
+    useEffect(() => {
+        // Update time immediately and set interval
+        updateTime();
+        const interval = setInterval(updateTime, 1000);
+
+        return () => clearInterval(interval);
+    }, []);
+
+    const updateTime = () => {
+        // Format local time as 12-hour with AM/PM
+        const time = new Date();
+        setLocalTime(time.toLocaleTimeString('en-US', {
+            hour: '2-digit',
+            minute: '2-digit',
+            hour12: true
+        }));
+    };
 
     return (
         <nav className='py-4 flex-container'>
@@ -9,7 +30,7 @@ const Navbar = () => {
                 <div className="flex items-center gap-5">
                     {/* logo */}
                     <h1>Media <span className=''>Sports</span></h1>
-                    <div className="flex items-center gap-4 py-2 px-4 rounded-md bg-[#1a1a1a] ">
+                    <div className="flex items-center gap-2 py-2 px-4 rounded-md bg-[#1a1a1a] ">
                         {/* Clock Icon */}
                         <svg
                             xmlns="http://www.w3.org/2000/svg"
@@ -28,8 +49,6 @@ const Navbar = () => {
 
                         {/* Timezone Dropdown */}
                         <select
-                            // value={timezone}
-                            // onChange={handleTimezoneChange}
                             className="text-sm focus:outline-none p-1 focus:ring-2 focus:ring-[#FF5722] focus:rounded-md overflow-y-scroll no-scroll "
                         >
                             <option value="GMT-11">GMT -11</option>
@@ -58,16 +77,17 @@ const Navbar = () => {
                         </select>
 
                         {/* Local Time Display */}
-                        <div className="text-sm text-gray-300 ml-auto">
-                            11:58
+                        <div className=" text-gray-300 font-bold bg-[#000000] py-1 px-4 rounded-lg">
+                            {localTime}
                         </div>
                     </div>
                 </div>
                 <div className="flex items-center gap-5">
-                    <Link href={'/'}>
+                    <Link href={'/'} className="hover:underline">
                         Why Mdeia Sports?
                     </Link>
-                    <Link href={'/'}>
+                    <Link href={'/'} className="flex items-center gap-1 hover:underline">
+                        <IoInformationCircleOutline className="text-2xl" />
                         FAQ?
                     </Link>
                     <button className='primary-btn'>
